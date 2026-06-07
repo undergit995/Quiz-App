@@ -54,7 +54,7 @@ export default function AdminStudentEdit() {
         email:userData.email
       }
 
-      let res=await axios.put(`http://localhost:8000/admin/putStudents/${id.id}`,obj,header)
+      let res=await axios.put(`http://localhost:8000/admin/putStudent/${id.id}`,obj,header)
       if(res.status==204){
         enqueueSnackbar('Updated!!',{variant:'success'})
         dispatch(putStudents({...obj,id}))

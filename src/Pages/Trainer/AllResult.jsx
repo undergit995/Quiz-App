@@ -5,7 +5,7 @@ import { enqueueSnackbar, SnackbarProvider } from "notistack";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Box, FormControl, OutlinedInput, TextField } from "@mui/material";
-import { getStu } from "../../Redux/ResultRedux.js";
+import { getStu, getStuAnswers } from "../../Redux/ResultRedux.js";
 import { SecondaryButton } from "../../Components/styledComponents/Buttons.js";
 import PropTypes from "prop-types";
 import Collapse from "@mui/material/Collapse";
@@ -41,6 +41,73 @@ function createData(name, email, score) {
   };
 }
 
+
+
+export default function AllResult() {
+  let { id } = useParams();
+  let stu = useSelector((state) => state.feedback.student);
+  let stuAnswers = useSelector((state) => state.feedback.answers);
+  const [name, setName] = useState("");
+  const [error, setError] = useState(false);
+console.log(stuAnswers);
+
+
+  const vertical = stu?.map((i, ind) => {
+      let stuAn= stuAnswers.map((j, indx) => {
+        console.log(j[j.length-1].duration);
+        
+          return {
+            duration: j[j.length-1].duration,
+          }
+        
+        })
+        console.log(stuAn);
+        
+    return {
+      name: i.userId.name,
+      email: i.userId.email,
+      score: i.score,
+      attempt:  stuAn,
+    };
+  });
+  let rows = vertical.filter((i) => {
+    return (
+      i.name.toLowerCase().includes(name.toLowerCase()) ||
+      i.email.toLowerCase().includes(name.toLowerCase()) ||
+      i.score.toString().includes(name.toLowerCase())
+    );
+  });
+  console.log(rows,vertical);
+
+  const dispatch = useDispatch();
+  async function getResult(params) {
+    try {
+    setError(p=>true)
+      let res = await axios.get(
+        `http://localhost:8000/trainer/allResults/${id}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        },
+      );
+      if(res.status==404||res.status==400){
+        setError(p=>true)
+        console.log(error);
+        return;        
+      }
+      console.log(res.data);
+
+      dispatch(getStu(res.data.results));
+      dispatch(getStuAnswers(res.data.answers));
+      setError(p=>false)
+    } catch (error) {
+      if(error.response.status==404||error.response.status==400){
+        setError(p=>true)
+        enqueueSnackbar("No attempts", { variant: "error" });
+        return;        
+      }
+      enqueueSnackbar("Server Error", { variant: "error" });
+    }
+  }
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
@@ -49,7 +116,7 @@ function Row(props) {
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell component="th" scope="row">
-          {row.name}
+          {row?.name}
         </TableCell>
         <TableCell align="right">{row.email}</TableCell>
         <TableCell align="right">{row.score}</TableCell>
@@ -78,17 +145,17 @@ function Row(props) {
                     <TableCell>Date</TableCell>
                     <TableCell>Questions</TableCell>
                     <TableCell align="right">Duration</TableCell>
-                    <TableCell align="right"></TableCell>
+                    <TableCell align="right">Attempts</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((i) => (
+                  {row?.attempt?.map((i) => (
                     <TableRow >
                       <TableCell component="th" scope="row">
                         {/* {historyRow.date} */}
                       </TableCell>
-                      {/* <TableCell>{historyRow.customerId}</TableCell> */}
-                      {/* <TableCell align="right">{historyRow.amount}</TableCell> */}
+                      <TableCell>{}</TableCell>
+                      <TableCell align="right">{i?.duration}</TableCell>
                       <TableCell align="right">
                         {/* {Math.round(historyRow.amount * row.price * 100) / 100} */}
                       </TableCell>
@@ -103,56 +170,9 @@ function Row(props) {
     </React.Fragment>
   );
 }
-
-export default function AllResult() {
-  let { id } = useParams();
-  let stu = useSelector((state) => state.feedback.student);
-  const [name, setName] = useState("");
-
-  const vertical = stu?.map((i, ind) => {
-    console.log(String(i.createdAt).split('T')[1].replace('Z',''));
-
-    return {
-      name: i.userId.name,
-      email: i.userId.email,
-      score: i.score,
-      attempt: [
-        {
-          duration: Math.trunc(
-            // (i.createdAt).splice(11,9) - i.attemptId.createdAt.splice(11,9) / 1000,
-          ),
-        },
-      ],
-    };
-  });
-  let rows = vertical.filter((i) => {
-    return (
-      i.name.toLowerCase().includes(name.toLowerCase()) ||
-      i.email.toLowerCase().includes(name.toLowerCase()) ||
-      i.score.toString().includes(name.toLowerCase())
-    );
-  });
-  console.log(rows);
-
-  const dispatch = useDispatch();
-  async function getResult(params) {
-    try {
-      let res = await axios.get(
-        `http://localhost:8000/trainer/allResults/${id}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        },
-      );
-      console.log(res.data);
-
-      dispatch(getStu(res.data.results));
-    } catch (error) {
-      enqueueSnackbar("Server Error", { variant: "error" });
-    }
-  }
-
   useEffect(() => {
     getResult();
+    if(stu.length<=0) setError(p=>true)
   }, []);
 
   return (
@@ -171,7 +191,7 @@ export default function AllResult() {
           />
         </FormControl>
         <Typography variant="h4" color="initial">
-          {`${stu[0]?.quizId.name}`} Results
+          {error?"":(`${stu[0]?.quizId.name}`)} Results
         </Typography>
       </Box>
       <Box>
@@ -182,13 +202,17 @@ export default function AllResult() {
                 <TableCell>Name</TableCell>
                 <TableCell align="right">Email</TableCell>
                 <TableCell align="right">Score</TableCell>
-                <TableCell />
+                {error?'':<TableCell />}
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row, ind) => (
+              {error?
+              <TableRow >                
+                <TableCell align="center" colSpan={3}>No Results</TableCell>
+                </TableRow>:
+              (rows?.map((row, ind) => (
                 <Row key={ind} row={row} />
-              ))}
+              )))}
             </TableBody>
           </Table>
         </TableContainer>

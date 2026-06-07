@@ -6,7 +6,8 @@ const resultSlice = createSlice({
     initialState:{
         resultOne:{},
         currentQuiz:[],
-        student:[]
+        student:[],
+        answers:[]
     },
     reducers:{
         getResult: (state,action)=>{
@@ -17,11 +18,14 @@ const resultSlice = createSlice({
         },
         getStu: (state,action)=>{
             state.student=action.payload
+        },
+        getStuAnswers: (state,action)=>{
+            state.answers=action.payload
         }
     }
 })
 
 export const {getResult,getCurrentQuiz,
-    getStu
+    getStu,getStuAnswers
 } = resultSlice.actions;
 export default resultSlice.reducer;

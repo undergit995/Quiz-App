@@ -82,7 +82,7 @@ export default function Result() {
     );
   });
   let attemptPrev = 
-  [1,2,3].map((k, indexes) => {
+  Array.from(Array(resultLength)).map((k, indexes) => {
     return (
   studentResult?.solutions?.map((i, ind) => {
     return (
