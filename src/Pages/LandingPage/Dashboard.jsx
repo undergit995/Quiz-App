@@ -4,7 +4,7 @@ import NavLayout from '../../Components/styledComponents/NavLayout'
 
 export default function Dashboard() {
   return (
-    <div>
+    <div>      
       <NavLayout/>
       <Outlet/>
     </div>

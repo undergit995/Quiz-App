@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 
 
 export default function AdminHome() {
@@ -13,6 +13,10 @@ export default function AdminHome() {
     >
       <Typography variant='h1'>Admin Space</Typography>
       
+      <Box >
+        <Typography variant="caption" color="initial"></Typography>
+        
+      </Box>
 
     </Box>
 

@@ -64,7 +64,7 @@ export default function AdminNav() {
   );
   return (
     <div>
-        <AppBar position='static' sx ={{backgroundColor:'primary',borderRadius:30}}>
+        <AppBar position='static' sx ={{backgroundColor:'primary',mx:1,borderRadius:30}}>
             <Toolbar>
                 <Stack sx={{flexGrow:1}}>
                     Logo
@@ -87,7 +87,7 @@ export default function AdminNav() {
             onClose={toggleDrawer('top', false)}
             onOpen={toggleDrawer('top', true)}            
           >
-            {list(top)}
+            {list("top")}
           </SwipeableDrawer>
 
         </AppBar>

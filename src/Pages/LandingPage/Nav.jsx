@@ -11,8 +11,6 @@ export default function Nav() {
   return (
     <div>
       <AppBar/>
-
-      
       <PrimaryButton onClick={()=>(navigate('/login'))}>Login</PrimaryButton>
     </div>
   )

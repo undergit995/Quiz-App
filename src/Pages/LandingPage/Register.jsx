@@ -11,8 +11,8 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import {PrimaryButton} from '../../Components/styledComponents/Buttons';
-import { useTheme } from '@mui/material';
+import {LinkButton, PrimaryButton, SecondaryButton} from '../../Components/styledComponents/Buttons';
+import { Stack, useTheme } from '@mui/material';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 import CardShadow from '../../Components/styledComponents/CardShadow';
 import axios from 'axios';
@@ -168,7 +168,11 @@ export default function Register() {
             label="Role"
           />
         </FormControl> */}
-        <PrimaryButton type='submit'>Register</PrimaryButton>
+        <Stack sx={{justifyContent:'space-between'}}>
+        <SecondaryButton onClick={()=>navigate('/login')} sx={{height:29,width:200,textAlign:'center'}}>Already Registered? Login</SecondaryButton>
+        <PrimaryButton type='submit' sx={{m:'auto',extAlign:'center'}}>Register</PrimaryButton>
+
+        </Stack>
       
      {/* <CardShadow  sx={{width:'200px'}}/> */}
     </Box>

@@ -15,11 +15,11 @@ import { useTheme } from '@mui/material';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 import axios from 'axios';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { ArrowBigLeftIcon } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PrimaryButton } from '../../../Components/styledComponents/Buttons';
 import { putStudents } from '../../../Redux/Redux';
 import { useState } from 'react';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 
 export default function AdminStudentEdit() {
@@ -30,7 +30,7 @@ export default function AdminStudentEdit() {
     name:studentList.name,
     email:studentList.email,
   })
-  const [edit, setedit] = useState(false)
+  const [edit, setEdit] = useState(false)
   const handleChange=(e)=>{
     setUserData(p=>({...p,[e.target.name]:e.target.value}))
   }
@@ -49,14 +49,12 @@ export default function AdminStudentEdit() {
   }
   async function handleSubmit(p) {
     try {
-      p.preventDefault()
       let obj={
         name:userData.name,
         email:userData.email
       }
 
-      // let res = await fetch("http://localhost:8000/auth/register",{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(obj)})
-      let res=await axios.put("http://localhost:8000/admin/putStudents",obj,header)
+      let res=await axios.put(`http://localhost:8000/admin/putStudents/${id.id}`,obj,header)
       if(res.status==204){
         enqueueSnackbar('Updated!!',{variant:'success'})
         dispatch(putStudents({...obj,id}))
@@ -72,12 +70,11 @@ export default function AdminStudentEdit() {
   }
   async function handleAdd(p) {
     try {
-      p.preventDefault()
       let obj={
         name:userData.name,
         email:userData.email
       }
-      let res=await axios.post("http://localhost:8000/admin/postStudents",obj,header)
+      let res=await axios.post("http://localhost:8000/admin/postStudent",obj,header)
       if(res.status==201){
         enqueueSnackbar('Student Added!!',{variant:'success'})
         dispatch(putStudents(res.student))
@@ -94,20 +91,23 @@ export default function AdminStudentEdit() {
   const navigate = useNavigate()
   const location= useLocation()
   React.useEffect(() => {
-    if(location.state){
+    if(id.id!='add'){
+      setEdit(p=>true)
+      let data=studentList.find((i)=>(i._id==id.id?true:false))
+      if(data){
       setEdit(p=>true)
       setUserData(p=>studentList.find((i)=>(i._id==id.id?true:false)))
       }
-    }, [])
-  
-
+    }
+  }, [edit,id,studentList])
+  console.log(edit,location.state);
   
   return (
     <Box sx={{bgColor:"blue",position:'relative',py:5}}>
-        <PrimaryButton onClick={navigate(-1)}><ArrowBigLeftIcon/>Back</PrimaryButton>
+        <PrimaryButton onClick={()=>{navigate(-1)}}><ArrowBackIosIcon fontSize='30'/>Back</PrimaryButton>
         <Box sx={{display:'flex', justifyContent:'center',width:'100vw',position:'relative',py:5}}>
           <SnackbarProvider/>
-    <Box sx={{ display: 'flex', flexDirection:'column',boxShadow:1,backdropFilter:'blur(50px)',px:2 }} component={'form'} onSubmit={handleSubmit}>
+    <Box sx={{ display: 'flex', flexDirection:'column',boxShadow:1,backdropFilter:'blur(50px)',px:2 }} component={'form'} onSubmit={handleForm}>
         
         <FormControl fullWidth sx={{ m: 1}} >
           <InputLabel htmlFor={`n-input`} sx={{color:'black'}}>Name</InputLabel>

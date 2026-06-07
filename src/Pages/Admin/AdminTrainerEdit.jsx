@@ -17,14 +17,16 @@ import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 import CardShadow from '../../Components/styledComponents/CardShadow';
 import axios from 'axios';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { ArrowBigLeftIcon } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteTrainers, putTrainers } from '../../Redux/Redux';
 import { useState } from 'react';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+
 
 
 export default function AdminTrainerEdit() {
-
+  
+  let trainerList = useSelector((state) => state.trainer.trainer);
   const [userData, setUserData] = useState({
     name:'',
     email:''
@@ -62,6 +64,7 @@ export default function AdminTrainerEdit() {
       if(res.status==204){
         enqueueSnackbar('Updated!!',{variant:'success'})
         dispatch(putTrainers({...obj,id:id.id}))
+        // navigate(1)
         setUserData(p=>({
     name:'',
     email:'',
@@ -94,22 +97,24 @@ export default function AdminTrainerEdit() {
     }    
   }
   const navigate = useNavigate()
-  let trainerList = useSelector((state) => state.trainer.trainer);
   const location= useLocation()
   React.useEffect(() => {
     if(id.id!=='add'){
       setEdit(p=>true)
       let data=trainerList.find((i)=>(i._id==id.id?true:false))
-      setUserData(i=>data)
+      if(data){
+      setEdit(p=>true)
+      setUserData(i=>trainerList.find((i)=>(i._id==id.id?true:false)))
+      }
       console.log("ta",trainerList);
       }
-    }, [])
+    }, [id,trainerList])
     console.log(userData,id,"trainerList")
     console.log(edit,"trainerList")
   
   return (
     <Box sx={{bgColor:"blue",position:'relative',py:5}}>
-        <PrimaryButton onClick={()=>{navigate(-1)}}><ArrowBigLeftIcon/>Back</PrimaryButton>
+        <PrimaryButton onClick={()=>{navigate(-1)}}><ArrowBackIosIcon fontSize='20'/>Back</PrimaryButton>
         <Box sx={{display:'flex', justifyContent:'center',width:'100vw',position:'relative',py:5}}>
           <SnackbarProvider/>
     <Box sx={{ display: 'flex', flexDirection:'column',boxShadow:1,backdropFilter:'blur(50px)',px:2 }} component={'form'} onSubmit={handleForm}>
