@@ -12,7 +12,6 @@ export default function StudentExams() {
 
     let quizzes = useSelector((state) => state.sliceOnes.quizOne) || []
     
-    console.log(quizzes);
     const [err, setErr] = React.useState(false);
     let header ={headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}}
     let dispatch = useDispatch()
@@ -22,7 +21,6 @@ export default function StudentExams() {
         try {            
             setErr(p=>true)
         let res = await axios.get('https://quiz-backend-cw2w.onrender.com/student/quiz',header)
-        console.log(res.data.quiz);
         dispatch(getQuizOne(res.data.quiz)) 
         setErr(p=>false)
         } catch (error) {
@@ -48,7 +46,6 @@ export default function StudentExams() {
             </Grid>
         )
     })
-
     
     useEffect(() => {
         getAllQuiz()
