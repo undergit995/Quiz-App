@@ -65,7 +65,7 @@ export default function QuizCreate({changeEdit}) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Stepper nonLinear activeStep={activeStep}>
+      {/* <Stepper nonLinear activeStep={activeStep}>
         {steps.map((label, index) => (
           <Step key={label} completed={completed[index]}>
             <StepButton
@@ -122,7 +122,10 @@ export default function QuizCreate({changeEdit}) {
             </Box>
           </React.Fragment>
         )}
-      </div>
+      </div> */}
+      <Typography variant="h4" color="initial" sx={{mb:2, textAlign:'center' }}>
+        Create Quiz
+      </Typography>
 
 
       <Outlet changeEdit={handleComplete}/>
@@ -130,7 +133,3 @@ export default function QuizCreate({changeEdit}) {
     </Box>
   );
 }
-
-  // function changeEditFun(){
-  //   changeEdit(true)
-  // }

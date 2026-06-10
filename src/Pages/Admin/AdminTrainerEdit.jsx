@@ -60,7 +60,7 @@ export default function AdminTrainerEdit() {
         name:userData.name,
         email:userData.email
       }
-      let res=await axios.put(`http://localhost:8000/admin/putTrainer/${id.id}`,obj,header)
+      let res=await axios.put(`https://quiz-backend-cw2w.onrender.com/admin/putTrainer/${id.id}`,obj,header)
       if(res.status==204){
         enqueueSnackbar('Updated!!',{variant:'success'})
         dispatch(putTrainers({...obj,id:id.id}))
@@ -82,7 +82,7 @@ export default function AdminTrainerEdit() {
         name:userData.name,
         email:userData.email
       }
-      let res=await axios.post("http://localhost:8000/admin/postTrainer",obj,header)
+      let res=await axios.post("https://quiz-backend-cw2w.onrender.com/admin/postTrainer",obj,header)
       if(res.status==201){
         enqueueSnackbar('Trainer Added!!',{variant:'success'})
         dispatch(putTrainers(res.trainer))

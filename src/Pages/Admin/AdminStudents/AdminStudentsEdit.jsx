@@ -54,7 +54,7 @@ export default function AdminStudentEdit() {
         email:userData.email
       }
 
-      let res=await axios.put(`http://localhost:8000/admin/putStudent/${id.id}`,obj,header)
+      let res=await axios.put(`https://quiz-backend-cw2w.onrender.com/admin/putStudent/${id.id}`,obj,header)
       if(res.status==204){
         enqueueSnackbar('Updated!!',{variant:'success'})
         dispatch(putStudents({...obj,id}))
@@ -74,7 +74,7 @@ export default function AdminStudentEdit() {
         name:userData.name,
         email:userData.email
       }
-      let res=await axios.post("http://localhost:8000/admin/postStudent",obj,header)
+      let res=await axios.post("https://quiz-backend-cw2w.onrender.com/admin/postStudent",obj,header)
       if(res.status==201){
         enqueueSnackbar('Student Added!!',{variant:'success'})
         dispatch(putStudents(res.student))

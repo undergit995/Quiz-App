@@ -2,36 +2,36 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Typography from "@mui/material/Typography";
 
-export default function Duration({ Submit }) {
-  let duration = useSelector((state) => state.sliceOnes.duration);
+export default function Duration({ submit,duration }) {
   const [isStarted, setisStarted] = useState(false);
   const [colors, setcolors] = useState(false);
-  const [min, setmin] = useState(duration*60);
-  const time = useRef("");
-  function quizTime() {
-    // if(isStarted){
+  const [min, setMin] = useState( duration);
+  const time = useRef(null);
+
+  const startTimer = () => {
     time.current = setInterval(() => {
-      setmin((p) => {
-        if (p <= 10) {
-          setcolors(true);
+      setMin(prev => {
+        if (prev <= 1) {
+          clearInterval(time.current);
+          submit?.();
+          return 0;
         }
-        if (p <= 0) {
-          Submit();
-        }
-        return p - 1;
+        return prev - 1;
       });
     }, 1000);
-    // }
-  }
-  useEffect(() => {
-    setisStarted(true);
-    quizTime();
+  };
 
-    return () => {
-      setisStarted(false);
+  useEffect(() => {
+    setMin(duration);
+
+    if (time.current) {
       clearInterval(time.current);
-    };
-  }, []);
+    }
+
+    startTimer();
+
+    return () => clearInterval(time.current);
+  }, [duration]);
 
   return (
     <div>

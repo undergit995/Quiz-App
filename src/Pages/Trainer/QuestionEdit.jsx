@@ -58,7 +58,7 @@ export default function QuestionEdit() {
     };
     try {
       let response = await axios.put(
-        `http://localhost:8000/trainer/questions/${quiz._id}`,
+        `https://quiz-backend-cw2w.onrender.com/trainer/questions/${quiz._id}`,
         obj,
         header,
       );

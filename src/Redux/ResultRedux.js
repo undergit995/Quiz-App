@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const resultSlice = createSlice({
     name:'feedback',
     initialState:{
-        resultOne:{},
+        resultOne:[],
         currentQuiz:[],
         student:[],
         answers:[]

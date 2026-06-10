@@ -11,11 +11,11 @@ import { PrimaryButton } from "../../Components/styledComponents/Buttons";
 export default function Result() {
   const dispatch = useDispatch();
   let token = localStorage.getItem("token");
-  const [toggle,setToggle] = useState(false)
+  const [toggle, setToggle] = useState(false);
   async function score() {
     try {
       let res = await axios.get(
-        `http://localhost:8000/student/quiz/result/${localStorage.getItem("quizId")}`,
+        `https://quiz-backend-cw2w.onrender.com/student/quiz/result/${localStorage.getItem("quizId")}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -32,13 +32,11 @@ export default function Result() {
   }
   let quizDetails = useSelector((state) => state.feedback.currentQuiz);
   let studentResult = useSelector((state) => state.feedback.resultOne);
-  let resultLength =studentResult?.result?.length-1
-  console.log(quizDetails,resultLength);
-  console.log(studentResult);
+  let resultLength = studentResult?.result?.length - 1;
   // if(studentResult){
   //     }
   // let displayResult = studentResult?.result?.map((i, ind) => { });
-    
+
   let displayMyAnswer = studentResult?.solutions?.map((i, ind) => {
     return (
       <Box key={ind} sx={{ m: 1 }}>
@@ -46,30 +44,37 @@ export default function Result() {
           {ind + 1}.{i.question}
         </Typography>
         <Stack>
-          {<Box sx={{display:'flex'}}>
-          <Typography variant="h6" color="initial" sx={{p:1}}>
-            Your Answer : </Typography>
-         <Typography variant="body1" color="initial" sx={{borderBottom:'1px solid black',p:1}}>
-            {studentResult?.answers[resultLength]?.map((e, index) => {
-              if (e.questionId == i._id) {
-                return `${i.options[e.answer]}`;
-              }
-            })} 
-            
-          </Typography> 
-          </Box>
+          {
+            <Box sx={{ display: "flex" }}>
+              <Typography variant="h6" color="initial" sx={{ p: 1 }}>
+                Your Answer :{" "}
+              </Typography>
+              <Typography
+                variant="body1"
+                color="initial"
+                sx={{ borderBottom: "1px solid black", p: 1 }}
+              >
+                {studentResult?.answers[resultLength]?.map((e, index) => {
+                  if (e.questionId == i._id) {
+                    return `${i.options[e.answer]}`;
+                  }
+                })}
+              </Typography>
+            </Box>
           }
-          {<Typography variant="body1" color="initial">
-            {
-              // if (index == studentResult?.answers[resultLength]?.map((j,index) => {
-              //   if (j.questionId == i._id) {
-              //     return j.answer;
-              //      } })) {
-              //   return `(Attempted) Your Answer : ${e} `;
-              // }
-              ` Correct Answer : ${i.options[i.correctAnswer]}`
-           }
-          </Typography>}
+          {
+            <Typography variant="body1" color="initial">
+              {
+                // if (index == studentResult?.answers[resultLength]?.map((j,index) => {
+                //   if (j.questionId == i._id) {
+                //     return j.answer;
+                //      } })) {
+                //   return `(Attempted) Your Answer : ${e} `;
+                // }
+                ` Correct Answer : ${i.options[i.correctAnswer]}`
+              }
+            </Typography>
+          }
           {/* <Typography variant="body1" color="initial">
               {i.options[studentResult?.answers[studentResult.answers.length-1]?.map((e, index) => {
                 if (e.questionId == i._id) {
@@ -81,53 +86,59 @@ export default function Result() {
       </Box>
     );
   });
-  let attemptPrev = 
-  Array.from(Array(resultLength)).map((k, indexes) => {
-    return (
-  studentResult?.solutions?.map((i, ind) => {
-    return (
-      <Grid item size={3}key={ind} sx={{ m: 1 }}>
-        <Typography variant="h4" color="initial">
-          {ind + 1}.{i.question}
-        </Typography>
-        <Stack>
-          {<Box sx={{display:'flex'}}>
-          <Typography variant="h6" color="initial" sx={{p:1}}>
-            Your Answer : </Typography>
-         <Typography variant="body1" color="initial" sx={{borderBottom:'1px solid black',p:1}}>
-            {studentResult?.answers[indexes]?.map((e, index) => {
-              if (e.questionId == i._id) {
-                return `${i.options[e.answer]}`;
-              }
-            })} 
-            
-          </Typography> 
-          </Box>
-          }
-          {<Typography variant="body1" color="initial">
+  let attemptPrev = Array.from(
+    Array(studentResult?.result?.length - 1 || 1),
+  )?.map((k, indexes) => {
+    return studentResult?.solutions?.map((i, ind) => {
+      return (
+        <Grid item size={3} key={ind} sx={{ m: 1 }}>
+          <Typography variant="h4" color="initial">
+            {ind + 1}.{i.question}
+          </Typography>
+          <Stack>
             {
-              // if (index == studentResult?.answers[resultLength]?.map((j,index) => {
-              //   if (j.questionId == i._id) {
-              //     return j.answer;
-              //      } })) {
-              //   return `(Attempted) Your Answer : ${e} `;
-              // }
-              ` Correct Answer : ${i.options[i.correctAnswer]}`
-           }
-          </Typography>}
-          {/* <Typography variant="body1" color="initial">
+              <Box sx={{ display: "flex" }}>
+                <Typography variant="h6" color="initial" sx={{ p: 1 }}>
+                  Your Answer :{" "}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="initial"
+                  sx={{ borderBottom: "1px solid black", p: 1 }}
+                >
+                  {studentResult?.answers[indexes]?.map((e, index) => {
+                    if (e.questionId == i._id) {
+                      return `${i.options[e.answer]}`;
+                    }
+                  })}
+                </Typography>
+              </Box>
+            }
+            {
+              <Typography variant="body1" color="initial">
+                {
+                  // if (index == studentResult?.answers[resultLength]?.map((j,index) => {
+                  //   if (j.questionId == i._id) {
+                  //     return j.answer;
+                  //      } })) {
+                  //   return `(Attempted) Your Answer : ${e} `;
+                  // }
+                  ` Correct Answer : ${i.options[i.correctAnswer]}`
+                }
+              </Typography>
+            }
+            {/* <Typography variant="body1" color="initial">
               {i.options[studentResult?.answers[studentResult.answers.length-1]?.map((e, index) => {
                 if (e.questionId == i._id) {
                   return e.answer;                
               }})
               ]}
             </Typography> */}
-        </Stack>
-      </Grid>
-    );
-  })
-)
-  })
+          </Stack>
+        </Grid>
+      );
+    });
+  });
 
   useEffect(() => {
     score();
@@ -139,38 +150,36 @@ export default function Result() {
     <Box sx={{ w: "100vw", mx: "auto" }}>
       <SnackbarProvider />
       <Box>
-        <Typography variant="h4" color="initial" sx={{textAlign:'center'}}>
+        <Typography variant="h4" color="initial" sx={{ textAlign: "center" }}>
           Feedback
         </Typography>
       </Box>
       <Box sx={{ mx: "auto" }}>
         <Typography variant="h5" color="initial">
           {quizDetails.name}
-          
         </Typography>
-        <Box>{ 
-      <Box >
-        <Typography variant="h5" color="initial">
-          {`Your Score : ${resultLength && studentResult?.result[resultLength ]?.score}`}
-        </Typography>
-        <IconButton>
-          <PrimaryButton onClick={() =>setToggle(p=>!p)}>History</PrimaryButton>
-        </IconButton>
+        <Box>
+          {
+            <Box>
+              <Typography variant="h5" color="initial">
+                {`Your Score :   ${studentResult.length <= 0 ? "" : studentResult?.result[resultLength || 0]?.score}`}
+              </Typography>
+              <IconButton>
+                {/* <PrimaryButton onClick={() =>setToggle(p=>!p)}>History</PrimaryButton> */}
+              </IconButton>
+            </Box>
+          }
+        </Box>
+        <Grid container spacing={2} sx={{ m: 3 }}>
+          <Grid item size={12}>
+            <Box sx={{ boxShadow: theme.shadows[3] }}>
+              {toggle ? "" : displayMyAnswer}
+            </Box>
+          </Grid>
+        </Grid>
       </Box>
-    }</Box>
-    <Grid container spacing={2} sx={{m:3}}>
-      <Grid item size={12}>
-        <Box sx={{boxShadow:theme.shadows[3]}}>{toggle?'':displayMyAnswer}</Box>
 
-      </Grid>
-
-    </Grid>
-      </Box>
-
-
-      <Grid container>
-        {toggle && attemptPrev}
-      </Grid>
+      <Grid container>{toggle && attemptPrev}</Grid>
     </Box>
   );
 }

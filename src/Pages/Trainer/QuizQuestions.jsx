@@ -20,23 +20,27 @@ import React, { useEffect } from "react";
 import { PrimaryButton } from "../../Components/styledComponents/Buttons";
 import { enqueueSnackbar, SnackbarProvider } from "notistack";
 import axios from "axios";
-import { deleteQuestions, getQuestions, postQuestions, postQuiz } from "../../Redux/Redux";
+import {
+  deleteQuestions,
+  getQuestions,
+  postQuestions,
+  postQuiz,
+} from "../../Redux/Redux";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate, useParams } from "react-router-dom";
 
-
 export default function QuizQuestions() {
   const [quiz, setQuiz] = useState({
-        question:'',
-        OptionA:'',
-        OptionB:'',
-        OptionC:'',
-        OptionD:'',
-        correctAnswer:''
-      });
+    question: "",
+    OptionA: "",
+    OptionB: "",
+    OptionC: "",
+    OptionD: "",
+    correctAnswer: "",
+  });
   const [toggle, setToggle] = useState(false);
   let question = useSelector((state) => state.trainer.questions);
 
@@ -45,7 +49,7 @@ export default function QuizQuestions() {
   const handleChange = (e) => {
     setQuiz((p) => ({ ...p, [e.target.name]: e.target.value }));
   };
-  let {id}= useParams()
+  let { id } = useParams();
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -55,15 +59,17 @@ export default function QuizQuestions() {
   let quizCode = useSelector((state) => state.trainer.quizCode);
   async function deleteQuestion(params) {
     try {
-      await axios.delete(`http://localhost:8000/trainer/questions/${params}`,header)
-      dispatch(deleteQuestions(params))
+      await axios.delete(
+        `https://quiz-backend-cw2w.onrender.com/trainer/questions/${params}`,
+        header,
+      );
+      dispatch(deleteQuestions(params));
     } catch (error) {
-      enqueueSnackbar('Server Error',{variant:'error'})
+      enqueueSnackbar("Server Error", { variant: "error" });
       console.log(error.message);
     }
-    
   }
-  
+
   const handleSubmit = async (p) => {
     p.preventDefault();
     let obj = {
@@ -74,20 +80,24 @@ export default function QuizQuestions() {
     setArr((p) => [...arr, obj]);
     console.log("quiz", quiz);
     try {
-      let res = await axios.post(`http://localhost:8000/trainer/questions/${id}`,obj,header)
-      if(res.status==200){
+      let res = await axios.post(
+        `https://quiz-backend-cw2w.onrender.com/trainer/questions/${id}`,
+        obj,
+        header,
+      );
+      if (res.status == 200) {
         console.log(res.data.questions);
-        
-        enqueueSnackbar('Question Added',{variant:'success'})
-      dispatch(postQuestions(res.data.questions));
-      setQuiz(p=>({
-        question:'',
-        OptionA:'',
-        OptionB:'',
-        OptionC:'',
-        OptionD:'',
-        correctAnswer:''
-      }))
+
+        enqueueSnackbar("Question Added", { variant: "success" });
+        dispatch(postQuestions(res.data.questions));
+        setQuiz((p) => ({
+          question: "",
+          OptionA: "",
+          OptionB: "",
+          OptionC: "",
+          OptionD: "",
+          correctAnswer: "",
+        }));
       }
     } catch (error) {
       enqueueSnackbar("Server Error", { variant: "error" });
@@ -96,13 +106,12 @@ export default function QuizQuestions() {
   };
 
   function EditQuestion(params) {
-    navigate(`/trainerdashboard/question/update/${params._id}`)
+    navigate(`/trainerdashboard/question/update/${params._id}`);
     if (params) {
       setToggle(true);
-      (params);
+      params;
       return;
     }
-    
   }
   // async function EditQuestion(ind) {
   //   setQuiz(p=>({
@@ -125,7 +134,7 @@ export default function QuizQuestions() {
   //     correctAnswer: quiz.correctAnswer,
   //   };
   //   try {
-  //     let response = await axios.put(`http://localhost:8000/trainer/questions/${ind._id}`,obj,header)
+  //     let response = await axios.put(`https://quiz-backend-cw2w.onrender.com/trainer/questions/${ind._id}`,obj,header)
   //     if(response.status==200){
   //       enqueueSnackbar('Question Updated',{variant:'success'})
   //       dispatch(postQuestions(obj));
@@ -154,19 +163,19 @@ export default function QuizQuestions() {
             {i.question}
           </Typography>
         </Box>
-        <Divider/>
-        
+        <Divider />
+
         <List sx={{ width: "80%" }}>
           <ListItem variant="h6" color="initial">
             {i.options[0]}
           </ListItem>
-          <ListItem  variant="h6" color="initial">
+          <ListItem variant="h6" color="initial">
             {i.options[1]}
           </ListItem>
-          <ListItem  variant="h6" color="initial">
+          <ListItem variant="h6" color="initial">
             {i.options[2]}
           </ListItem>
-          <ListItem  variant="h6" color="initial">
+          <ListItem variant="h6" color="initial">
             {i.options[3]}
           </ListItem>
         </List>
@@ -197,16 +206,19 @@ export default function QuizQuestions() {
   });
   async function name(params) {
     try {
-      let res = await axios.get(`http://localhost:8000/trainer/questions/${id}`, header);
+      let res = await axios.get(
+        `https://quiz-backend-cw2w.onrender.com/trainer/questions/${id}`,
+        header,
+      );
       // console.log();
-      
+
       if (res.status == 200) dispatch(getQuestions(res.data.questions));
     } catch (error) {
       console.log(error.message);
     }
   }
   useEffect(() => {
-    name()
+    name();
   }, []);
 
   return (
@@ -221,7 +233,7 @@ export default function QuizQuestions() {
         }}
       >
         <SnackbarProvider />
-{/*         
+        {/*         
         <Box
           sx={{
             display: "flex",
@@ -235,7 +247,7 @@ export default function QuizQuestions() {
         >
           <Box sx={{}}></Box>
         </Box> */}
-        
+
         <Stack component={"form"} onSubmit={handleSubmit}>
           <FormControl fullWidth sx={{ m: 1 }}>
             <InputLabel htmlFor={`n-input`} sx={{ color: "black" }}>
@@ -324,12 +336,23 @@ export default function QuizQuestions() {
               onChange={handleChange}
             />
           </FormControl>
-          <PrimaryButton type="submit" sx={{w:100}}>{toggle ? 'Update Question' : 'Add Question'}</PrimaryButton>
+          <PrimaryButton type="submit" sx={{ w: 100 }}>
+            {toggle ? "Update Question" : "Add Question"}
+          </PrimaryButton>
         </Stack>
       </Box>
-      <Box sx={{W:'80vw',m:'auto',boxShadow:1,backdropFilter:'blur(50px)',p:2,borderRadius:2}}>
-      {questions}
-        </Box>
+      <Box
+        sx={{
+          W: "80vw",
+          m: "auto",
+          boxShadow: 1,
+          backdropFilter: "blur(50px)",
+          p: 2,
+          borderRadius: 2,
+        }}
+      >
+        {questions}
+      </Box>
     </div>
   );
 }

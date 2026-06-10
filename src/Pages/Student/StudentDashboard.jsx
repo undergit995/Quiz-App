@@ -5,7 +5,7 @@ import { Box } from '@mui/material'
 
 export default function StudentDashboard() {
   return (
-    <Box sx={{display:'flex',height:'100%',width:'100vw'}}>
+    <Box sx={{display:'flex',height:'100vh',width:'100vw'}}>
         <StudentNav />
         <Outlet />
     </Box>

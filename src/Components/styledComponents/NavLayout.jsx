@@ -78,7 +78,7 @@ export default function NavLayout() {
     <div>
       <AppBar
         position="static"
-        sx={{m:1, backgroundColor: "primary", borderRadius: 30 }}
+        sx={{backgroundColor: "primary", borderRadius: 30 }}
       >
         <Toolbar>
           <Stack sx={{ flexGrow: 1 }}>Logo</Stack>

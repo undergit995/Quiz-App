@@ -4,7 +4,12 @@ import { enqueueSnackbar, SnackbarProvider } from "notistack";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getDuration, getQuizQuestions, getQuizzes } from "../../Redux/Redux";
+import {
+  getQuizQuestions,
+  getQuizzes,
+  removeDuration,
+  setDuration,
+} from "../../Redux/Redux";
 import QuestionLayout from "./QuestionLayout";
 import { PrimaryButton } from "../../Components/styledComponents/Buttons";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,6 +23,8 @@ export default function StudentQuiz() {
 
   let { id } = useParams();
   let questions = useSelector((state) => state.sliceOnes.quizQuestions);
+
+  let duration = useSelector((state) => state.sliceOnes.duration);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let header = {
@@ -26,14 +33,12 @@ export default function StudentQuiz() {
   async function name() {
     try {
       let res = await axios.get(
-        `http://localhost:8000/student/question/${id}`,
+        `https://quiz-backend-cw2w.onrender.com/student/question/${id}`,
         header,
       );
       dispatch(getQuizQuestions(res.data.questions));
-      dispatch(getDuration(res.data.duration))
-      
+      dispatch(setDuration(res.data.duration));
     } catch (error) {
-      // enqueueSnackbar('Server Error',{variant:'error',anchorOrigin:{vertical:'top',horizontal:'right'}})
       enqueueSnackbar("Server Error", { variant: "error" });
     }
   }
@@ -65,48 +70,49 @@ export default function StudentQuiz() {
     // }
     setCurrentIndex(currentIndex + 1);
   };
+  function storeAns() {
+    // prevAns();
+  }
 
-  async function Submit(params) {
+  async function submit(params) {
     try {
       let res = await axios.post(
-        `http://localhost:8000/student/quiz/result/${localStorage.getItem(
-          "attemptId"
+        `https://quiz-backend-cw2w.onrender.com/student/quiz/result/${localStorage.getItem(
+          "attemptId",
         )}`,
         {},
-          header
+        header,
       );
       // dispatch(getResult())
-      localStorage.removeItem('attemptId')
-      console.log(res.data);
-      navigate(`/studentdashboard/quiz/result`,{state:{result:res.data.result,quizId:id}});
+      localStorage.removeItem("attemptId");
+      dispatch(removeDuration(10 * 60));
+      navigate(
+        `/studentdashboard/quiz/result`,
+        // {state:{result:res.data?.result,quizId:id}}
+      );
     } catch (error) {
       enqueueSnackbar("Server Error", { variant: "error" });
     }
   }
 
-  function result(params) {
-    // WITHOUT RE_
-    setfirst((p) => params);
-  }
   // let currentQuiz=quiz.
 
   // .sort(()=>Math.random()-0.5)
-        let item=questions?.find((i, ind) => {
-          if (ind == currentIndex) {
-            return true;
-          }
-          return false;
-        })
+  let item = questions?.find((i, ind) => {
+    if (ind == currentIndex) {
+      return true;
+    }
+    return false;
+  });
 
-        console.log(item);
-        
+  // console.log(item);
+
   let querry = questions.map((element, index) => {
     return (
       <Grid size={3} key={index}>
         <Box
           onClick={() => {
             setCurrentIndex(index);
-            result(element);
           }}
           sx={{
             display: "flex",
@@ -135,18 +141,27 @@ export default function StudentQuiz() {
     <Grid container spacing={2} sx={{ m: 3 }}>
       <SnackbarProvider />
       <Grid size={9} sx={{}}>
-        <Box><Duration Submit={Submit} id={id}/></Box>
         <Box>
-          <QuestionLayout items={item} id={id} index={currentIndex} />
+          <Duration submit={submit} duration={duration} id={id} />
+        </Box>
+        <Box>
+          <QuestionLayout
+            // prevAns={prev} preAns ={next}
+            items={item}
+            id={id}
+            index={currentIndex}
+          />
         </Box>
         <PrimaryButton
-          onClick={prev}
+          onClick={() => {
+            prev();
+          }}
           disabled={currentIndex <= 0 ? !disabled : disabled}
         >
           Previous
         </PrimaryButton>
         <PrimaryButton
-          onClick={currentIndex >= questions.length - 1 ? Submit : next}
+          onClick={currentIndex >= questions.length - 1 ? submit : next}
         >
           {currentIndex >= questions.length - 1 ? "Submit" : "next"}
         </PrimaryButton>
@@ -154,7 +169,7 @@ export default function StudentQuiz() {
       <Grid size={3}>
         <Grid container spacing={2} sx={{ m: 1 }}>
           {querry}
-          <PrimaryButton onClick={Submit}>Submit</PrimaryButton>
+          <PrimaryButton onClick={submit}>Submit</PrimaryButton>
         </Grid>
       </Grid>
     </Grid>

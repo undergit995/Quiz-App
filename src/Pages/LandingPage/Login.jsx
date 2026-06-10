@@ -49,7 +49,7 @@ export default function Login() {
     };
     try {
       let res = await axios.post(
-        "http://localhost:8000/auth/login",
+        "https://quiz-backend-cw2w.onrender.com/auth/login",
         obj,
         //   formdata,{headers:{
         //   'Content-Type':'multipart/form-data'

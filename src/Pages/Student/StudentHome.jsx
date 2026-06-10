@@ -13,7 +13,7 @@ export default function StudentHome() {
           <Typography variant="h6" color="initial">
             Attempt quiz now
           </Typography>
-
+          
         </Box>
       </Box>
     </div>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Typography from '@mui/material/Typography'
-import { Box, Grid } from '@mui/material'
+import { Box, Grid, LinearProgress } from '@mui/material'
 import { enqueueSnackbar, SnackbarProvider } from 'notistack'
 import { useDispatch, useSelector } from 'react-redux'
 import { getQuizOne } from '../../Redux/Redux'
@@ -10,21 +10,27 @@ import { useNavigate } from 'react-router-dom'
 
 export default function StudentExams() {
 
-    let quizzes = useSelector((state) => state.sliceOnes.quizOne)
+    let quizzes = useSelector((state) => state.sliceOnes.quizOne) || []
+    
+    console.log(quizzes);
+    const [err, setErr] = React.useState(false);
     let header ={headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}}
     let dispatch = useDispatch()
     const navigate = useNavigate()
 
     async function getAllQuiz(params) {
         try {            
-        let res = await axios.get('http://localhost:8000/student/quiz',header)
+            setErr(p=>true)
+        let res = await axios.get('https://quiz-backend-cw2w.onrender.com/student/quiz',header)
         console.log(res.data.quiz);
-        dispatch(getQuizOne(res.data.quiz))        
+        dispatch(getQuizOne(res.data.quiz)) 
+        setErr(p=>false)
         } catch (error) {
             console.log(error.message);
             enqueueSnackbar('Server Error',{variant:'error'})            
         }
     }
+    
 
     let quizzesList = quizzes?.map((i) =>{
         return(
@@ -46,7 +52,10 @@ export default function StudentExams() {
     
     useEffect(() => {
         getAllQuiz()
+        if(quizzes?.length<=0){ setErr(p=>true)}
   }, [])
+        if(quizzes?.length<=0) return(
+      <LinearProgress aria-label="Loading…" />)
   return (
     <Box>
         <SnackbarProvider/>

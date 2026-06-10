@@ -41,33 +41,32 @@ function createData(name, email, score) {
   };
 }
 
-
-
 export default function AllResult() {
   let { id } = useParams();
   let stu = useSelector((state) => state.feedback.student);
   let stuAnswers = useSelector((state) => state.feedback.answers);
   const [name, setName] = useState("");
   const [error, setError] = useState(false);
-console.log(stuAnswers);
-
+  console.log(stuAnswers);
 
   const vertical = stu?.map((i, ind) => {
-      let stuAn= stuAnswers.map((j, indx) => {
-        console.log(j[j.length-1].duration);
-        
-          return {
-            duration: j[j.length-1].duration,
-          }
-        
-        })
-        console.log(stuAn);
-        
+    let stuAn = stuAnswers.map((j, indx) => {
+      console.log(j[j.length - 1].duration);
+
+      return {
+        duration: j[j.length - 1].duration,
+        userId: j[0]?.attemptId?.user,
+        qDate: j[0]?.createdAt,
+      };
+    });
+    console.log(stu);
+
     return {
+      userId: i.userId._id,
       name: i.userId.name,
       email: i.userId.email,
       score: i.score,
-      attempt:  stuAn,
+      attempt: stuAn,
     };
   });
   let rows = vertical.filter((i) => {
@@ -77,109 +76,105 @@ console.log(stuAnswers);
       i.score.toString().includes(name.toLowerCase())
     );
   });
-  console.log(rows,vertical);
+  console.log(rows, vertical);
 
   const dispatch = useDispatch();
   async function getResult(params) {
     try {
-    setError(p=>true)
+      setError((p) => true);
       let res = await axios.get(
-        `http://localhost:8000/trainer/allResults/${id}`,
+        `https://quiz-backend-cw2w.onrender.com/trainer/allResults/${id}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         },
       );
-      if(res.status==404||res.status==400){
-        setError(p=>true)
+      if (res.status == 404 || res.status == 400) {
+        setError((p) => true);
         console.log(error);
-        return;        
+        return;
       }
       console.log(res.data);
 
       dispatch(getStu(res.data.results));
       dispatch(getStuAnswers(res.data.answers));
-      setError(p=>false)
+      setError((p) => false);
     } catch (error) {
-      if(error.response.status==404||error.response.status==400){
-        setError(p=>true)
+      if (error.response.status == 404 || error.response.status == 400) {
+        setError((p) => true);
         enqueueSnackbar("No attempts", { variant: "error" });
-        return;        
+        return;
       }
       enqueueSnackbar("Server Error", { variant: "error" });
     }
   }
-function Row(props) {
-  const { row } = props;
-  const [open, setOpen] = React.useState(false);
+  function Row(props) {
+    const { row } = props;
+    const [open, setOpen] = React.useState(false);
 
-  return (
-    <React.Fragment>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-        <TableCell component="th" scope="row">
-          {row?.name}
-        </TableCell>
-        <TableCell align="right">{row.email}</TableCell>
-        <TableCell align="right">{row.score}</TableCell>
-        {/* <TableCell align="right">{row.duration}</TableCell> */}
-        <TableCell align="right">
-          <IconButton
-            sx={{ color: "white" }}
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Attempt Details
-              </Typography>
-              <Table size="small" aria-label="attempts">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Questions</TableCell>
-                    <TableCell align="right">Duration</TableCell>
-                    <TableCell align="right">Attempts</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {row?.attempt?.map((i) => (
-                    <TableRow >
-                      <TableCell component="th" scope="row">
-                        {/* {historyRow.date} */}
-                      </TableCell>
-                      <TableCell>{}</TableCell>
-                      <TableCell align="right">{i?.duration}</TableCell>
-                      <TableCell align="right">
-                        {/* {Math.round(historyRow.amount * row.price * 100) / 100} */}
-                      </TableCell>
+    return (
+      <React.Fragment>
+        <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
+          <TableCell component="th" scope="row">
+            {row?.name}
+          </TableCell>
+          <TableCell align="right">{row.email}</TableCell>
+          <TableCell align="right">{row.score}</TableCell>
+          {/* <TableCell align="right">{row.duration}</TableCell> */}
+          <TableCell align="right">
+            <IconButton
+              sx={{ color: "white" }}
+              aria-label="expand row"
+              size="small"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <Box sx={{ margin: 1 }}>
+                <Typography variant="h6" gutterBottom component="div">
+                  Attempt Details
+                </Typography>
+                <Table size="small" aria-label="attempts">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Date</TableCell>
+                      <TableCell align="right">Duration</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  );
-}
+                  </TableHead>
+                  <TableBody>
+                    {row?.attempt?.map((i) =>
+                      row.userId == i?.userId ? (
+                        <TableRow>
+                          <TableCell component="th" scope="row">
+                            {i?.qDate}
+                          </TableCell>
+                          <TableCell align="right">{i?.duration}</TableCell>
+                        </TableRow>
+                      ) : null,
+                    )}
+                  </TableBody>
+                </Table>
+              </Box>
+            </Collapse>
+          </TableCell>
+        </TableRow>
+      </React.Fragment>
+    );
+  }
   useEffect(() => {
     getResult();
-    if(stu.length<=0) setError(p=>true)
+    if (stu.length <= 0) setError((p) => true);
   }, []);
 
   return (
     <Box sx={{ width: "100vw", mx: "auto" }}>
       <SnackbarProvider />
-      <Box sx={{ m: 1,}}>
-        <FormControl sx={{width:'50%'}} sx={{ m: 1 }}>
+      <Box sx={{ m: 1 }}>
+        <FormControl sx={{ width: "50%" }} sx={{ m: 1 }}>
           <OutlinedInput
             sx={{ color: "black" }}
             id={`n-input`}
@@ -187,11 +182,11 @@ function Row(props) {
             value={name}
             type="text"
             placeholder="Search name..."
-            onChange={(e) => setName(e.target.value)}          
+            onChange={(e) => setName(e.target.value)}
           />
         </FormControl>
         <Typography variant="h4" color="initial">
-          {error?"":(`${stu[0]?.quizId.name}`)} Results
+          {error ? "" : `${stu[0]?.quizId.name}`} Results
         </Typography>
       </Box>
       <Box>
@@ -202,17 +197,19 @@ function Row(props) {
                 <TableCell>Name</TableCell>
                 <TableCell align="right">Email</TableCell>
                 <TableCell align="right">Score</TableCell>
-                {error?'':<TableCell />}
+                {error ? "" : <TableCell />}
               </TableRow>
             </TableHead>
             <TableBody>
-              {error?
-              <TableRow >                
-                <TableCell align="center" colSpan={3}>No Results</TableCell>
-                </TableRow>:
-              (rows?.map((row, ind) => (
-                <Row key={ind} row={row} />
-              )))}
+              {error ? (
+                <TableRow>
+                  <TableCell align="center" colSpan={3}>
+                    No Results
+                  </TableCell>
+                </TableRow>
+              ) : (
+                rows?.map((row, ind) => <Row key={ind} row={row} />)
+              )}
             </TableBody>
           </Table>
         </TableContainer>

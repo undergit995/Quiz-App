@@ -8,9 +8,11 @@ export default function ProtectRoutes({children,role}) {
     useEffect(() => {
     let decodeRole = jwtDecode(token)
     if(decodeRole.role!=role){
-        localStorage.clearItem('token')
-        return navigate('/login',{replace:true})
-    }
+      navigate('/login',{replace:true})
+      localStorage.clearItem('token')
+      return;
+      }
     }, [])
+    
   return children
 }

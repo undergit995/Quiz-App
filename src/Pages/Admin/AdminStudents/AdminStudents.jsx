@@ -78,7 +78,7 @@ export default function AdminStudents() {
   async function handleDelete(params) {
     try {
       await axios.delete(
-        `http://localhost:8000/admin/deleteStudent/${params}`,
+        `https://quiz-backend-cw2w.onrender.com/admin/deleteStudent/${params}`,
         header,
       );
       dispatch(deleteStudents(params));
@@ -90,7 +90,7 @@ export default function AdminStudents() {
   async function name(params) {
     try {
       const res = await axios.get(
-        `http://localhost:8000/admin/students`,
+        `https://quiz-backend-cw2w.onrender.com/admin/students`,
         header,
       );
       console.log(res.data);

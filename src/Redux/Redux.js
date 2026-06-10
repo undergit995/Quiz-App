@@ -124,26 +124,31 @@ const oneSlice = createSlice({
     initialState:{
         trainerOne:[],
         quizOne:[],
-        duration:10,
+        quizPrev:[],
+        duration:10*60,
         quizQuestions:[],
         prevQuestion:[]
     },
     reducers:{
         getTrainerOne: (state,action)=>{
-            state.tarinerOne=action.payload
+            state.trainerOne=action.payload
         },
         getQuizOne: (state,action)=>{
+            console.log(action.payload);
+            
             state.quizOne=action.payload
         },
         getQuizTest: (state,action)=>{
-            state.quizOne=action.payload
+            state.quizPrev=action.payload
         },
-        getDuration:(state,action)=>{state.duration = action.payload},
+        setDuration:(state,action)=>{state.duration = action.payload},
+        removeDuration:(state,action)=>{state.duration = action.payload},
         getQuizQuestions: (state,action)=>{
             state.quizQuestions=action.payload
         },
-        postPrev:(state,action)=>{
-            state.prevQuestion.unshift(action.payload)
+        updatePrev:(state,action)=>{     
+            state.prevQuestion=action.payload
+            
         },
         deletePrev:(state,action)=>{
             state.prevQuestion=state.prevQuestion.filter((i)=>{
@@ -169,7 +174,7 @@ export const {getTrainers,putTrainers,postTrainers,deleteTrainers,
     getQuizzes,postQuiz,putQuizzes,deleteQuizzes,updateQuizzes,
     postQuizCode,getQuestions,putQuestions,postQuestions,deleteQuestions} = trainerSlice.actions
 export const {getStudents,putStudents,postStudents,deleteStudents,getStudentMCQ} = studentSlice.actions
-export const {getQuizOne,getTrainerOne,getDuration,getQuizQuestions,getQuizTest,postPrev,deletePrev} = oneSlice.actions
+export const {getQuizOne,getTrainerOne,setDuration,removeDuration,getQuizQuestions,getQuizTest,updatePrev,postPrev,deletePrev} = oneSlice.actions
 
 export let studentSlices=studentSlice.reducer;
 export let oneSlices=oneSlice.reducer;

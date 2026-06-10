@@ -70,7 +70,7 @@ export default function Register() {
         password:userData.password,
       }
       // let res = await fetch("http://localhost:8000/auth/register",{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(obj)})
-      let res=await axios.post("http://localhost:8000/auth/register",obj)
+      let res=await axios.post("https://quiz-backend-cw2w.onrender.com/auth/register",obj)
       if(res.status==204){
         enqueueSnackbar('Registered Succesfully',{variant:'success'})
         navigate('/login',{replace:true})

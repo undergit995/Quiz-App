@@ -58,18 +58,18 @@ const settings = ['Settings', 'Logout'];
         <Box >
           <SecondaryButton onClick={()=>{navigate(`/studentdashboard/home`)}} sx={{width:"100%"}}>{"Home"}</SecondaryButton>                                             
         </Box>
-        <Grid item size={3}>
-          <SecondaryButton onClick={()=>{navigate(`/studentdashboard/quiz/test`)}} sx={{width:"100%"}}>{"Examinations"}</SecondaryButton>                                             
-        </Grid>
-        <Grid item size={2}>
-          <SecondaryButton onClick={()=>{navigate(`/studentdashboard/profile`)}} sx={{width:"100%"}}>{"Profile"}</SecondaryButton>
-        </Grid>
-        <Grid item size={1}>
+        <Box item size={3}>
+          <SecondaryButton onClick={()=>{navigate(`/studentdashboard/quiz/premium`)}} sx={{width:"100%"}}>{"Membership"}</SecondaryButton>                                             
+        </Box>
+        <Box item size={1}>
           <SecondaryButton onClick={()=>{navigate(`/studentdashboard/quiz`)}} sx={{width:"100%"}}>{"My Quiz"}</SecondaryButton>
-        </Grid>
-        <Grid item size={3}>
+        </Box>
+        <Box item size={2}>
+          <SecondaryButton onClick={()=>{navigate(`/studentdashboard/profile`)}} sx={{width:"100%"}}>{"Profile"}</SecondaryButton>
+        </Box>
+        <Box item size={3}>
           <SecondaryButton onClick={()=>{navigate(`/studentdashboard`)}} sx={{width:"100%"}}>{"Test Series"}</SecondaryButton>
-        </Grid>
+        </Box>
       </Box>
       
 <Box sx={{ ml:'auto' }}>

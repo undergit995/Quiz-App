@@ -4,9 +4,11 @@ import { Button, styled } from "@mui/material";
 export let PrimaryButton= styled(Button)(({theme})=>({
     backgroundColor:theme.colorSchemes.dark.palette.primary.main,
     color:theme.colorSchemes.dark.palette.primary.contrastText,
+    p:'1px',
     borderRadius:'20px',
     height:'28px',
-    width:'55px',
+    width:'75px',
+    marginRight:'1px',
     '&:hover': {
         transform:'scale(1.1)'
           },

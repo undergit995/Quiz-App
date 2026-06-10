@@ -12,7 +12,7 @@ import AdminStudentEdit from './Pages/Admin/AdminStudents/AdminStudentsEdit'
 import TrainerDashboard from './Pages/Trainer/TrainerDashboard'
 import QuizQuestions from './Pages/Trainer/QuizQuestions'
 import StudentDashboard from './Pages/Student/StudentDashboard'
-import StudentHome from './Pages/Student/StduentHome'
+import StudentHome from './Pages/Student/StudentHome'
 import StudentQuiz from './Pages/Student/StudentQuiz'
 import TrainerHome from './Pages/Trainer/TrainerHome'
 import ResetPassword from './Pages/LandingPage/Miscelleneous/Password/ResetPassword'
@@ -29,6 +29,7 @@ import QuizInfo from './Pages/Student/QuizInfo'
 import Result from './Pages/Student/Result'
 import AllResult from './Pages/Trainer/AllResult'
 import StudentProfile from './Pages/Student/StudentProfile'
+import StudentMembership from './Pages/Student/StudentMembership'
 
 
 function App() {
@@ -68,6 +69,7 @@ function App() {
           <Route index element={<StudentHome/>}/>
           <Route path='/studentdashboard/home' element={<StudentHome/>}/>
           <Route path='/studentdashboard/quiz' element={<StudentExams/>}/>
+          <Route path='/studentdashboard/quiz/premium' element={<StudentMembership/>}/>
           <Route path='/studentdashboard/quiz/code/:id' element={<QuizCodeEnter/>}/>
            <Route path='/studentdashboard/profile' element={<StudentProfile/>}/>
           <Route path='/studentdashboard/quiz/result' element={<Result/>}/>
