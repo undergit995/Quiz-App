@@ -123,11 +123,11 @@ const theme = createTheme({
     },
     h5: {
       fontSize: '1.25rem',
-      fontWeight: 600,
       lineHeight: 1.5,
     },
     h6: {
       fontSize: '1.125rem',
+      fontWeight: 600,
       fontWeight: 600,
       lineHeight: 1.5,
     },

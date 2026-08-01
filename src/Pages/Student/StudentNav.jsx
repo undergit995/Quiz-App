@@ -51,8 +51,16 @@ export default function StudentNav() {
   React.useEffect(() => {}, []);
 
   return (
-    <Stack sx={{ borderRadius: 3, justifyContent: "space-between" }}>
-      <Box spacing={1} sx={{ m: 1, p: 1 }}>
+    <Stack
+      sx={{
+        width: 240,
+        flexShrink: 0,
+        borderRight: "1px solid rgba(0, 0, 0, 0.12)",
+        height: "100vh",
+        justifyContent: "space-between",
+      }}
+    >
+      <Box sx={{ p: 2 }}>
         <Box>
           <SecondaryButton
             onClick={() => {
@@ -63,7 +71,7 @@ export default function StudentNav() {
             {"Home"}
           </SecondaryButton>
         </Box>
-        <Box item size={3}>
+        <Box sx={{ mt: 1 }}>
           <SecondaryButton
             onClick={() => {
               navigate(`/studentdashboard/quiz/premium`);
@@ -73,7 +81,7 @@ export default function StudentNav() {
             {"Membership"}
           </SecondaryButton>
         </Box>
-        <Box item size={1}>
+        <Box sx={{ mt: 1 }}>
           <SecondaryButton
             onClick={() => {
               navigate(`/studentdashboard/quiz`);
@@ -83,7 +91,7 @@ export default function StudentNav() {
             {"My Quiz"}
           </SecondaryButton>
         </Box>
-        <Box item size={2}>
+        <Box sx={{ mt: 1 }}>
           <SecondaryButton
             onClick={() => {
               navigate(`/studentdashboard/profile`);
@@ -93,7 +101,7 @@ export default function StudentNav() {
             {"Profile"}
           </SecondaryButton>
         </Box>
-        <Box item size={3}>
+        <Box sx={{ mt: 1 }}>
           <SecondaryButton
             onClick={() => {
               navigate(`/studentdashboard`);
@@ -105,7 +113,7 @@ export default function StudentNav() {
         </Box>
       </Box>
 
-      <Box sx={{ ml: "auto" }}>
+      <Box sx={{ p: 2, display: "flex", justifyContent: "center" }}>
         <Tooltip title="Profile">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />

@@ -1,41 +1,43 @@
+import { lazy, Suspense } from 'react';
 import {BrowserRouter,Route,Routes} from 'react-router-dom'
-import Register from './Pages/LandingPage/Register'
-import Home from './Pages/LandingPage/Home'
-import Login from './Pages/LandingPage/Login'
-import Dashboard from './Pages/LandingPage/Dashboard'
-import AdminDashboard from './Pages/Admin/AdminDashboard'
-import AdminHome from './Pages/Admin/AdminHome'
-import AdminTrainers from './Pages/Admin/AdminTrainers'
-import AdminTrainerEdit from './Pages/Admin/AdminTrainerEdit';
-import AdminStudents from './Pages/Admin/AdminStudents/AdminStudents'
-import AdminStudentEdit from './Pages/Admin/AdminStudents/AdminStudentsEdit'
-import TrainerDashboard from './Pages/Trainer/TrainerDashboard'
-import QuizQuestions from './Pages/Trainer/QuizQuestions'
-import StudentDashboard from './Pages/Student/StudentDashboard'
-import StudentHome from './Pages/Student/StudentHome'
-import StudentQuiz from './Pages/Student/StudentQuiz'
-import TrainerHome from './Pages/Trainer/TrainerHome'
-import ResetPassword from './Pages/LandingPage/Miscelleneous/Password/ResetPassword'
-import GivePassword from './Pages/LandingPage/Miscelleneous/Password/GivePassword'
-import TrainerProfile from './Pages/Trainer/TrainerProfile'
 import ProtectRoutes from './Pages/LandingPage/Miscelleneous/ProtectRoutes'
-import QuizCode from './Pages/Trainer/QuizCode'
-import QuizCreate from './Pages/Trainer/QuizCreate'
-import QuizEdit from './Pages/Trainer/QuizEdit'
-import QuestionEdit from './Pages/Trainer/QuestionEdit'
-import StudentExams from './Pages/Student/StudentExams'
-import QuizCodeEnter from './Pages/Student/QuizCodeEnter'
-import QuizInfo from './Pages/Student/QuizInfo'
-import Result from './Pages/Student/Result'
-import AllResult from './Pages/Trainer/AllResult'
-import StudentProfile from './Pages/Student/StudentProfile'
-import StudentMembership from './Pages/Student/StudentMembership'
 
+const Register = lazy(() => import('./Pages/LandingPage/Register'));
+const Home = lazy(() => import('./Pages/LandingPage/Home'));
+const Login = lazy(() => import('./Pages/LandingPage/Login'));
+const Dashboard = lazy(() => import('./Pages/LandingPage/Dashboard'));
+const AdminDashboard = lazy(() => import('./Pages/Admin/AdminDashboard'));
+const AdminHome = lazy(() => import('./Pages/Admin/AdminHome'));
+const AdminTrainers = lazy(() => import('./Pages/Admin/AdminTrainers'));
+const AdminTrainerEdit = lazy(() => import('./Pages/Admin/AdminTrainerEdit'));
+const AdminStudents = lazy(() => import('./Pages/Admin/AdminStudents/AdminStudents'));
+const AdminStudentEdit = lazy(() => import('./Pages/Admin/AdminStudents/AdminStudentsEdit'));
+const TrainerDashboard = lazy(() => import('./Pages/Trainer/TrainerDashboard'));
+const QuizQuestions = lazy(() => import('./Pages/Trainer/QuizQuestions'));
+const StudentDashboard = lazy(() => import('./Pages/Student/StudentDashboard'));
+const StudentHome = lazy(() => import('./Pages/Student/StudentHome'));
+const StudentQuiz = lazy(() => import('./Pages/Student/StudentQuiz'));
+const TrainerHome = lazy(() => import('./Pages/Trainer/TrainerHome'));
+const ResetPassword = lazy(() => import('./Pages/LandingPage/Miscelleneous/Password/ResetPassword'));
+const GivePassword = lazy(() => import('./Pages/LandingPage/Miscelleneous/Password/GivePassword'));
+const TrainerProfile = lazy(() => import('./Pages/Trainer/TrainerProfile'));
+const QuizCode = lazy(() => import('./Pages/Trainer/QuizCode'));
+const QuizCreate = lazy(() => import('./Pages/Trainer/QuizCreate'));
+const QuizEdit = lazy(() => import('./Pages/Trainer/QuizEdit'));
+const QuestionEdit = lazy(() => import('./Pages/Trainer/QuestionEdit'));
+const StudentExams = lazy(() => import('./Pages/Student/StudentExams'));
+const QuizCodeEnter = lazy(() => import('./Pages/Student/QuizCodeEnter'));
+const QuizInfo = lazy(() => import('./Pages/Student/QuizInfo'));
+const Result = lazy(() => import('./Pages/Student/Result'));
+const AllResult = lazy(() => import('./Pages/Trainer/AllResult'));
+const StudentProfile = lazy(() => import('./Pages/Student/StudentProfile'));
+const StudentMembership = lazy(() => import('./Pages/Student/StudentMembership'));
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
         <Route path='/' element={<Dashboard/>}>
           <Route index element={<Home/>}/>
           <Route path='/home' element={<Home/>}/>
@@ -76,7 +78,8 @@ function App() {
         </Route>
           <Route path='/student/quiz/test/:id' element={<ProtectRoutes role='student'><StudentQuiz/> </ProtectRoutes>}/>
           <Route path='/student/quiz/info/:id' element={<ProtectRoutes role='student'><QuizInfo/></ProtectRoutes>}/>
-      </Routes>
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }
