@@ -29,14 +29,14 @@ export default function QuestionLayout({ items, index, id }) {
   const result = async () => {
     try {
       const res = await axios.post(
-        `https://quiz-backend-cw2w.onrender.com/quiz/storedAnswer/${localStorage.getItem(
+        `https://quiz-backend-cw2w.onrender.com/student/quiz/storedAnswer/${localStorage.getItem(
           "attemptId",
         )}`,
         { quizId: id },
         header,
       );
 
-      if (res?.data?.attempt?.length > 0) {
+      if (res?.data?.attempt) {
         dispatch(updatePrev(res.data.attempt));
       }
     } catch (error) {

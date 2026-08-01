@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Or your preferred API client
 
 // Base URL for your backend API
-const API_BASE_URL = 'https://quiz-backend-cw2w.onrender.com/student/profile'; // Make sure this is correct
+const API_BASE_URL = 'https://quiz-backend-cw2w.onrender.com'; // Make sure this is correct
 
 const StudentProfile = () => {
   const [studentData, setStudentData] = useState({
